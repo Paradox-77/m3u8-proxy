@@ -5,7 +5,8 @@
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, HEAD, POST, OPTIONS',
-  'Access-Control-Allow-Headers': '*'
+  'Access-Control-Allow-Headers': '*',
+  'Transfer-Encoding': 'chunked'
 };
 const PROXY_ENDPOINT = '/corsproxy/';
 
@@ -37,7 +38,6 @@ async function handleRequest(request) {
   for (const [key, value] of Object.entries(headers)) {
     request.headers.set(key, value);
   }
-  request.headers.set('Accept-Encoding', 'identity');
 
   const originalCookies = request.headers.get('Cookie');
   if (originalCookies) {
