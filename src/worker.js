@@ -91,7 +91,6 @@ async function handleRequest(request) {
       headers: {
         'Content-Type': contentType,
         'Access-Control-Allow-Origin': '*', // Set CORS header here
-        'Transfer-Encoding': 'chunked',
         Vary: 'Origin', // Add Vary header here
         ...(proxiedCookies && { 'Set-Cookie': proxiedCookies })
       }
