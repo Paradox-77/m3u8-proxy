@@ -50,6 +50,10 @@ async function handleRequest(request) {
     response.headers.get('Content-Type').includes('application/vnd.apple.mpegurl') ||
     response.headers.get('Content-Type').includes('text/vtt')
   ) {
+    const contentType = response.headers.get('Content-Type').includes('text/vtt')
+      ? 'text/vtt'
+      : 'application/vnd.apple.mpegurl';
+
     let headersString = '';
     for (const [key, value] of Object.entries(headers)) {
       headersString += `&${key}=${encodeURIComponent(value)}`;
@@ -86,7 +90,7 @@ async function handleRequest(request) {
     // Recreate the response with modified playlist
     response = new Response(modifiedArrayBuffer, {
       headers: {
-        'Content-Type': 'application/vnd.apple.mpegurl',
+        'Content-Type': contentType,
         'Access-Control-Allow-Origin': '*', // Set CORS header here
         Vary: 'Origin', // Add Vary header here
         ...(proxiedCookies && { 'Set-Cookie': proxiedCookies })
