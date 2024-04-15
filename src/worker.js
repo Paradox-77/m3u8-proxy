@@ -45,10 +45,7 @@ async function handleRequest(request) {
 
   let response = await fetch(request);
 
-  if (
-    response.headers.get('Content-Type').includes('application/vnd.apple.mpegurl') ||
-    response.headers.get('Content-Type').includes('text/vtt')
-  ) {
+  if (response.headers.get('Content-Type').includes('application/vnd.apple.mpegurl')) {
     const contentType = response.headers.get('Content-Type').includes('text/vtt')
       ? 'text/vtt'
       : 'application/vnd.apple.mpegurl';
