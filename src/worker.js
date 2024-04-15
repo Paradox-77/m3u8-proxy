@@ -72,7 +72,7 @@ async function handleRequest(request) {
           )}/${encodeURIComponent(line)}${headersString}`;
           return modifiedURL;
         } else if (line.endsWith('ts')) {
-          const modifiedURL = `?destination=${apiUrl.replace(/\/[^/]+\.m3u8/, '')}/${encodeURIComponent(
+          const modifiedURL = `?destination=${apiUrl.replace(/\/[^/]+\.ts/, '')}/${encodeURIComponent(
             line
           )}${headersString}`;
           return modifiedURL;
