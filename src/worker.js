@@ -46,10 +46,6 @@ async function handleRequest(request) {
   let response = await fetch(request);
 
   if (response.headers.get('Content-Type').includes('application/vnd.apple.mpegurl')) {
-    const contentType = response.headers.get('Content-Type').includes('text/vtt')
-      ? 'text/vtt'
-      : 'application/vnd.apple.mpegurl';
-
     let headersString = '';
     for (const [key, value] of Object.entries(headers)) {
       headersString += `&${key}=${encodeURIComponent(value)}`;
@@ -70,9 +66,15 @@ async function handleRequest(request) {
           )}${headersString}`;
           return modifiedURL;
         } else if (line.endsWith('m3u8')) {
+          // Modify playlist for vidsrcto
           const modifiedURL = `?destination=${encodeURIComponent(
             apiUrl.replace(/\/list[^/]+\.m3u8/, '')
           )}/${encodeURIComponent(line)}${headersString}`;
+          return modifiedURL;
+        } else if (line.endsWith('ts')) {
+          const modifiedURL = `?destination=${apiUrl.replace(/\/[^/]+\.m3u8/, '')}/${encodeURIComponent(
+            line
+          )}${headersString}`;
           return modifiedURL;
         }
         return line;
@@ -86,7 +88,7 @@ async function handleRequest(request) {
     // Recreate the response with modified playlist
     response = new Response(modifiedArrayBuffer, {
       headers: {
-        'Content-Type': contentType,
+        'Content-Type': 'application/vnd.apple.mpegurl',
         'Access-Control-Allow-Origin': '*', // Set CORS header here
         Vary: 'Origin', // Add Vary header here
         ...(proxiedCookies && { 'Set-Cookie': proxiedCookies })
